@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Gotham';
+  src:
+    url(/public/fonts/Gotham-Black.otf) format('otf'),
+    url(/public/fonts/Gotham-Bold.otf) format('otf'),
+    url(/public/fonts/Gotham-Light.otf) format('otf'),
+    url(/public/fonts/Gotham-Thin.otf) format('otf'),
+    url(/public/fonts/Gotham-XLight.otf) format('otf'),
+    url(/public/fonts/GothamBold.ttf) format('ttf'),
+    url(/public/fonts/GothamBook.ttf) format('ttf'),
+    url(/public/fonts/GothamLight.ttf) format('ttf'),
+    url(/public/fonts/GothamMedium.ttf) format('ttf'),
+    url(/public/fonts/GothamMedium_1.ttf) format('ttf');
+
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Gotham', sans-serif;
+}
+/* Button */
+
+.button {
+  @apply flex items-center justify-center gap-3;
+}
+
+/* Button Sizes */
+.small {
+  @apply px-4 py-3;
+}
+.medium {
+  @apply px-6 py-[1.3125rem];
+}
+.full {
+  @apply w-full p-3.5 xl:p-[1.0625rem] lg:p-3 md:p-[1.3125rem] text-center;
+}
+
+/* Button Variants */
+.primary {
+  @apply text-white text-sm xl:text-base lg:text-xs md:text-base text-center font-medium leading-[.875rem] md:leading-4 bg-darkPrimary rounded-xl border border-darkPrimary hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70;
+}
+
+.secondary {
+  @apply text-darkPrimary text-base text-center font-medium leading-4 bg-transparent border border-darkPrimary rounded-xl disabled:cursor-not-allowed disabled:bg-opacity-70;
+}
+
+.tertiary {
+  @apply text-darkPrimary text-sm xl:text-base lg:text-xs md:text-base text-center font-normal leading-4 bg-transparent border border-borderTertiary rounded-xl disabled:cursor-not-allowed disabled:bg-opacity-70;
+}
+
+.error {
+  @apply text-white text-sm text-center font-medium leading-[.875rem] md:leading-4 bg-errorButton rounded-xl border border-errorButton hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70 md:text-base shadow-[1px_4px_8px_0px_rgba(0,0,0,0.16)];
+}
+
+.error-light {
+  @apply text-darkPrimary text-sm text-center font-medium leading-[.875rem] md:leading-4 bg-errorButtonLight rounded-xl border border-errorButtonLight hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70 md:text-base shadow-[1px_4px_8px_0px_rgba(0,0,0,0.16)];
+}
+
+.success {
+  @apply text-darkPrimary text-sm text-center font-medium leading-[.875rem] md:leading-4 bg-successButton rounded-xl border border-successButton hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70 md:text-base shadow-[1px_4px_8px_0px_rgba(0,0,0,0.16)];
+}
+
+.success-light {
+  @apply text-darkPrimary text-sm text-center font-medium leading-[.875rem] md:leading-4 bg-successButtonLight rounded-xl border border-successButtonLight hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70 md:text-base shadow-[1px_4px_8px_0px_rgba(0,0,0,0.16)];
+}
+
+/* Custom Radio */
+
+.radio input[type='radio']:checked + div svg {
+  @apply block;
+}
+
+/* Custom Checkbox */
+
+.checkbox input[type='checkbox']:checked + div {
+  @apply bg-[#3b71fe] rounded-sm;
+}
+
+.checkbox input[type='checkbox']:checked + div svg {
+  @apply block;
+}
+
+/* Badge Variants */
+
+.badge {
+  @apply py-2 px-5 rounded-full border-none;
+}
+
+.badge-blue {
+  @apply bg-badgeBlueBg text-badgeBlue;
+}
+
+.badge-green {
+  @apply bg-badgeGreenBg text-badgeGreen;
+}
+
+/* Input Variants */
+
+.input-small {
+  @apply h-12 text-xl font-normal p-3.5 rounded-lg;
+}
+
+.input-medium {
+  @apply h-11 md:h-[3.75rem] lg:h-[2.625rem] xl:h-[3.75rem] text-sm font-normal p-5 rounded-xl;
+}
+
+/* Avatar */
+
+.avatar {
+  @apply w-[6.25rem] h-[6.25rem] xl:w-[8.75rem] xl:h-[8.75rem];
+}
+
+/* Editor Background Color */
+
+.ProseMirror {
+  background-color: transparent !important;
+}

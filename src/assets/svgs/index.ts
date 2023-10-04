@@ -1,0 +1,14 @@
+export { OpenEye } from '@/assets/svgs/OpenEye';
+export { HideEye } from '@/assets/svgs/HideEye';
+export { GoogleIcon } from '@/assets/svgs/GoogleIcon';
+export { CheckmarkIcon } from '@/assets/svgs/CheckmarkIcon';
+export { RadioButtonIcon } from '@/assets/svgs/RadioButtonIcon';
+export { ModalCloseIcon } from '@/assets/svgs/ModalCloseIcon';
+export { RadioCheckedIcon } from '@/assets/svgs/RadioCheckedIcon';
+export { StudentIcon } from '@/assets/svgs/StudentIcon';
+export { InstitutionIcon } from '@/assets/svgs/InstitutionIcon';
+export { ChevronUpDownIcon } from '@/assets/svgs/ChevronUpDownIcon';
+export { InputSearchIcon } from '@/assets/svgs/InputSearchIcon';
+export { UndoIcon } from '@/assets/svgs/UndoIcon';
+export { FlagIcon } from '@/assets/svgs/FlagIcon';
+export { UnFlagIcon } from '@/assets/svgs/UnFlagIcon';
