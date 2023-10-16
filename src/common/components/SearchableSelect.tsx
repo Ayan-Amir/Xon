@@ -36,7 +36,7 @@ export function SearchableSelect({ profileData }: ProfileDataProps) {
   const { setProfilePayload } = useContext(userContext);
 
   const handleUpdateProfilePayload = () => {
-    setProfilePayload(prevData => ({
+    setProfilePayload((prevData) => ({
       ...prevData,
       degree: selectedOption,
     }));
@@ -49,7 +49,7 @@ export function SearchableSelect({ profileData }: ProfileDataProps) {
   const filteredOptions =
     selectedFilteredOption === ''
       ? profileData
-      : profileData?.filter(department => {
+      : profileData?.filter((department) => {
           return department.degrees.some((degree: DegreesTypeProps) => {
             const degreeName = degree.name.toLowerCase().replace(/\s+/g, '');
             const filteredOption = selectedFilteredOption
@@ -79,7 +79,13 @@ export function SearchableSelect({ profileData }: ProfileDataProps) {
                 setSelectedFilteredOption(event?.target?.value)
               }
             />
-            <Combobox.Button className='absolute inset-y-0 right-0 pr-4 md:pr-[1.625rem] flex items-center'>
+            <Combobox.Button
+              className={({ open }) =>
+                `absolute inset-y-0 right-4 md:right-[1.625rem] flex items-center transition ease-in-out  ${
+                  open ? '-rotate-180' : 'rotate-0'
+                }`
+              }
+            >
               <ChevronUpDownIcon />
             </Combobox.Button>
           </div>
@@ -102,52 +108,40 @@ export function SearchableSelect({ profileData }: ProfileDataProps) {
                       disabled
                       key={department?.id}
                       className={({ active }) =>
-                        `relative select-none py-2 pl-6 xl:pl-[1.875rem] lg:pl-[1.375rem] md:pl-[1.875rem] pr-4 ${
-                          active
-                            ? 'bg-darkPrimary bg-opacity-5 text-darkPrimary'
-                            : 'text-gray-900'
+                        `relative select-none py-2 pl-6 xl:pl-[1.875rem] lg:pl-[1.375rem] md:pl-[1.875rem] pr-4 text-darkPrimary ${
+                          active && 'bg-darkPrimary bg-opacity-5'
                         }`
                       }
                       value={department}
                     >
-                      {() => (
-                        <>
-                          <span
-                            className={`block truncate font-medium text-sm md:text-base leading-[1.625rem]`}
-                          >
-                            {`${department?.id}. ${department?.name}`}
-                          </span>
-                        </>
-                      )}
+                      <span
+                        className={`block truncate font-medium text-sm md:text-base leading-[1.625rem]`}
+                      >
+                        {`${department?.id}. ${department?.name}`}
+                      </span>
                     </Combobox.Option>
                     {!isEmpty(department?.degrees) && (
                       <div className='space-y-2'>
-                        {department?.degrees?.map((degree: DegreesTypeProps) => (
-                          <div key={degree?.id}>
-                            <Combobox.Option
-                              className={({ active }) =>
-                                `relative cursor-pointer select-none py-2 pl-6 xl:pl-[1.875rem] lg:pl-[1.375rem] md:pl-[1.875rem] pr-4 ${
-                                  active
-                                    ? 'bg-darkPrimary bg-opacity-5 text-darkPrimary'
-                                    : 'text-gray-900'
-                                }`
-                              }
-                              value={degree}
-                            >
-                              {({ selected }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? 'font-medium' : 'font-normal'
-                                    } text-sm md:text-base leading-[1.625rem] pl-4`}
-                                  >
-                                    {`- ${degree?.name}`}
-                                  </span>
-                                </>
-                              )}
-                            </Combobox.Option>
-                          </div>
-                        ))}
+                        {department?.degrees?.map(
+                          (degree: DegreesTypeProps) => (
+                            <div key={degree?.id}>
+                              <Combobox.Option
+                                className={({ active }) =>
+                                  `relative cursor-pointer select-none py-2 pl-6 xl:pl-[1.875rem] lg:pl-[1.375rem] md:pl-[1.875rem] pr-4 text-darkPrimary ${
+                                    active && 'bg-darkPrimary bg-opacity-5'
+                                  }`
+                                }
+                                value={degree}
+                              >
+                                <span
+                                  className={`block truncate font-normal text-sm md:text-base leading-[1.625rem] pl-4`}
+                                >
+                                  {`- ${degree?.name}`}
+                                </span>
+                              </Combobox.Option>
+                            </div>
+                          ),
+                        )}
                       </div>
                     )}
                   </div>

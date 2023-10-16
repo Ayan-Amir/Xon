@@ -1,8 +1,17 @@
 import React from 'react';
+import { ButtonLoader } from '@/common/components/ButtonLoader';
 
 export type ButtonSize = 'small' | 'medium' | 'full';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'error' | 'error-light' | 'success' | 'success-light';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'error'
+  | 'error-light'
+  | 'error-outline'
+  | 'success'
+  | 'success-light';
 
 export type ButtonState = true | false;
 
@@ -42,13 +51,11 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={state}
       className={`button ${className} ${size} ${variant} ${state}`}
       {...props}
-    //   disabled
     >
       {iconType === 'lead' && icon}
-      {label}
+      {state ? <ButtonLoader /> : label}
       {iconType === 'tail' && icon}
       {/* TODO: In future we change this text to loader */}
-      {state && 'loading'}
     </button>
   );
 };

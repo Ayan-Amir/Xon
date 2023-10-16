@@ -5,7 +5,8 @@ export type RadioButton = {
   label: string;
 };
 
-export type RadioButtonProps = React.InputHTMLAttributes<HTMLInputTypeAttribute> & RadioButton;
+export type RadioButtonProps =
+  React.InputHTMLAttributes<HTMLInputTypeAttribute> & RadioButton;
 
 export const RadioButton: React.FC<RadioButtonProps> = ({ label }) => {
   return (
@@ -19,10 +20,7 @@ export const RadioButton: React.FC<RadioButtonProps> = ({ label }) => {
         <RadioButtonIcon />
       </div>
 
-      <label
-        htmlFor={label}
-        className='text-sm text-darkPrimary font-medium'
-      >
+      <label htmlFor={label} className='text-sm text-darkPrimary font-medium'>
         {label}
       </label>
     </div>

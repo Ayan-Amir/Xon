@@ -15,7 +15,7 @@ export const SlideFeature = ({ isUndoCard, handleUndoCard, isFlagged, handleFlag
           <UndoIcon />
         </button>
       }
-      <button className='h-[2rem] w-[2rem] flex items-center justify-center' onClick={handleFlagCard}>
+      <button className='review-flag-icon h-[2rem] w-[2rem] flex items-center justify-center' onClick={handleFlagCard}>
         {isFlagged ? <UnFlagIcon /> : <FlagIcon />}
       </button>
     </div>

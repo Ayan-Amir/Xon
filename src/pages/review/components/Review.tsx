@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { useGetRequest, usePatchMutation, usePostMutation } from '@/services/networkRequestService';
+import { useParams, useNavigate } from 'react-router';
+import {
+  useGetRequest,
+  usePatchMutation,
+  usePostMutation,
+} from '@/services/networkRequestService';
 import { apiEndPoint } from '@/services';
 import {
   Badge,
@@ -8,14 +12,17 @@ import {
   SlideFeature,
   ReviewCard,
   Button,
+  ReviewCardCompleted,
 } from '@/common/components';
-import { CARD_MEMO_STATE } from '@/utils/constant';
+import { CARD_MEMO_STATE, FLAGGED } from '@/utils/constant';
+import { updateReviewEndPoint } from '@/utils';
 import { SPACEBAR } from '@/utils/constant';
 import { CrossIcon } from '@/assets/svgs/CrossIcon';
 
 type CardDeckTagProps = {
   id: number,
   label: string,
+  colorCode: string,
 };
 
 type Params = {
@@ -24,6 +31,7 @@ type Params = {
 
 export const Review = () => {
   const { deckId } = useParams<Params>();
+  const navigate = useNavigate();
 
   const [isExpandedCard, setIsExpandedCard] = useState<boolean>(false);
   //TODO: needs to fix this any propType
@@ -32,15 +40,12 @@ export const Review = () => {
   const [cardMemoState, setCardMemoState] = useState<number>();
   const [isUndoCard, setIsUndoCard] = useState<boolean>(false);
   const [showPrevReviewCard, setShowPrevReviewCard] = useState<boolean>(false);
+  const [prevReviewCardLoading, setPrevReviewCardLoading] = useState<boolean>(false);
 
-  const {
-    data: deckCardDetail,
-    isFetching: deckCardDetailLoading,
-    refetch: deckCardDetailRefetch,
-  } = useGetRequest(
+  const { isFetching: deckCardDetailLoading } = useGetRequest(
     'review-deck-card',
     [],
-    apiEndPoint.REVIEW_DECK_CARD(deckId),
+    `${updateReviewEndPoint(deckId)}`,
     {
       refetchOnWindowFocus: false,
       retry: true,
@@ -49,55 +54,70 @@ export const Review = () => {
   );
 
   const handleCardMemoState = (cardState: number) => {
+    setIsExpandedCard(false);
     setCardMemoState(cardState);
     setPrevReviewCard(currentReviewCard);
     setIsUndoCard(true);
-    setShowPrevReviewCard(false)
+    setShowPrevReviewCard(false);
     handleNextCardDeckDetail();
   };
 
-  const { mutate: handleNextCardDeckDetail, isLoading: nextCardDetailLoading } = usePostMutation(
-    'next-deck-card-detail',
-    apiEndPoint.REVIEW_DECK_CARD(deckId),
-    {
-      isUndo: false,
-      memoState: cardMemoState,
-      card: currentReviewCard?.data?.card?.id,
-    },
-    (resp) => {
-      setIsExpandedCard(false);
-      setCurrentReviewCard(resp);
-    },
-    (err) => console.log(err),
-  );
+  const { mutate: handleNextCardDeckDetail, isLoading: nextCardDetailLoading } =
+    usePostMutation(
+      'next-deck-card-detail',
+      `${updateReviewEndPoint(deckId)}`,
+      {
+        isUndo: false,
+        memoState: cardMemoState,
+        card: currentReviewCard?.data?.card?.id,
+      },
+      (resp) => {
+        setIsExpandedCard(false);
+        setCurrentReviewCard(resp);
+      },
+      (err) => console.log(err),
+    );
 
-  const { mutate: handleFlagCard, isLoading: flagCardLoading } = usePatchMutation(
-		'flag-card',
-		apiEndPoint.UPDATE_REVIEW_DECK_CARD(currentReviewCard?.data?.card?.id),
-		{
-			isFlagged: !currentReviewCard?.data?.card?.isFlagged,
-		},
-		(resp) => {
-      setCurrentReviewCard({
-        ...currentReviewCard, 
-          data: {...currentReviewCard?.data,
-            card: {...currentReviewCard?.data?.card, isFlagged: resp?.data?.isFlagged}
-        }
-      });
-      showPrevReviewCard && setPrevReviewCard({
-        ...prevReviewCard, 
-          data: {...prevReviewCard?.data,
-            card: {...prevReviewCard?.data?.card, isFlagged: resp?.data?.isFlagged}
-        }
-      });
-    },
-		(err) => console.log(err),
-	);
+  const { mutate: handleFlagCard, isLoading: flagCardLoading } =
+    usePatchMutation(
+      'flag-card',
+      apiEndPoint.UPDATE_REVIEW_DECK_CARD(currentReviewCard?.data?.card?.id),
+      {
+        isFlagged: !currentReviewCard?.data?.card?.isFlagged,
+      },
+      (resp) => {
+        setCurrentReviewCard({
+          ...currentReviewCard,
+          data: {
+            ...currentReviewCard?.data,
+            card: {
+              ...currentReviewCard?.data?.card,
+              isFlagged: resp?.data?.isFlagged,
+            },
+          },
+        });
+        showPrevReviewCard &&
+          setPrevReviewCard({
+            ...prevReviewCard,
+            data: {
+              ...prevReviewCard?.data,
+              card: {
+                ...prevReviewCard?.data?.card,
+                isFlagged: resp?.data?.isFlagged,
+              },
+            },
+          });
+      },
+      (err) => console.log(err),
+    );
 
-  const handleSpaceBarKeyPress = (event: KeyboardEvent) => event.code === SPACEBAR && setIsExpandedCard(!isExpandedCard);
+  const handleSpaceBarKeyPress = (event: KeyboardEvent) =>
+    event.code === SPACEBAR && setIsExpandedCard(!isExpandedCard);
 
   const handleUndoCard = () => {
     setShowPrevReviewCard(true);
+    setPrevReviewCardLoading(true);
+    setTimeout(() => {setPrevReviewCardLoading(false)}, 500)
     setIsUndoCard(false);
     setIsExpandedCard(false);
     setCurrentReviewCard(prevReviewCard);
@@ -112,46 +132,61 @@ export const Review = () => {
 
   return (
     <div className='w-full min-h-screen h-auto flex flex-col items-center'>
-      <button className='absolute top-[3.75rem] right-[3.75rem] w-[3.75rem] h-[3.75rem]'>
+      <button
+        className='absolute top-[3.75rem] right-[3.75rem] w-[3.75rem] h-[3.75rem]'
+        onClick={() => navigate(-1)}
+      >
         <CrossIcon />
       </button>
       <div className='pt-[6.25rem]'>
-        <h1 className='mb-6 text-5xl leading-[45.94px] font-bold'>
-          {/* TODO: Needs to display dynamically deck title */}
-          💊 Y1 Pharmacology
+        <h1 className='mb-6 text-5xl leading-[3.125rem] font-bold'>
+            {currentReviewCard?.data?.card?.deckName}
         </h1>
         <div className='flex gap-4 mb-8'>
-          {currentReviewCard?.data?.card?.tags?.map((cardDeckTag: CardDeckTagProps) => (
-            <Badge
-              key={cardDeckTag?.id}
-              label={cardDeckTag?.label}
-              //TODO: now the variant is static needs to handle this variant dynamically as well.
-              variant={cardDeckTag?.id % 2 === 0 ? 'green' : 'blue'}
-            />
-          ))}
+          {currentReviewCard?.data?.card?.tags?.map(
+            (cardDeckTag: CardDeckTagProps) => (
+              <Badge
+                key={cardDeckTag?.id}
+                label={cardDeckTag?.label}
+                variant={cardDeckTag?.colorCode}
+              />
+            ),
+          )}
         </div>
         <ProgressBar progressbarDetail={currentReviewCard} />
-        <div className='relative'>
-          <ReviewCard isExpandedCard={isExpandedCard} setIsExpandedCard={setIsExpandedCard} reviewCardDetail={showPrevReviewCard ? prevReviewCard : currentReviewCard} isLoading={deckCardDetailLoading} />
-          <div className='absolute top-[4.375rem] -right-[5.375rem]'>
-            <SlideFeature 
-              isUndoCard={isUndoCard}
-              handleUndoCard={handleUndoCard}
-              isFlagged={showPrevReviewCard ? prevReviewCard?.data?.card?.isFlagged : currentReviewCard?.data?.card?.isFlagged}
-              handleFlagCard={handleFlagCard}
-            />
-          </div>
-        </div>
-        <p className='text-center mt-6 text-base font-light leading-[0.9375rem] text-darkPrimary'>
-          Press <span className='font-bold'>SPACE </span>to{' '}
-          {isExpandedCard ? 'collapse' : 'expand'}
-        </p>
+        {(currentReviewCard?.data?.isCompleted) && <ReviewCardCompleted />}
+        {(!currentReviewCard?.data?.isCompleted && !deckCardDetailLoading) && <>
+            <div className='relative'>
+              <ReviewCard
+                isExpandedCard={isExpandedCard}
+                setIsExpandedCard={setIsExpandedCard}
+                reviewCardDetail={showPrevReviewCard ? prevReviewCard : currentReviewCard}
+                isLoading={nextCardDetailLoading || prevReviewCardLoading}
+              />
+              <div className='absolute top-[4.375rem] -right-[5.375rem]'>
+                <SlideFeature
+                  isUndoCard={isUndoCard}
+                  handleUndoCard={handleUndoCard}
+                  isFlagged={
+                    showPrevReviewCard
+                      ? prevReviewCard?.data?.card?.isFlagged
+                      : currentReviewCard?.data?.card?.isFlagged
+                  }
+                  handleFlagCard={handleFlagCard}
+                />
+              </div>
+            </div>
+            <p className='text-center mt-6 text-base font-light leading-[0.9375rem] text-darkPrimary'>
+              Press <span className='font-bold'>SPACE </span>to{' '}
+              {isExpandedCard ? 'collapse' : 'expand'}
+            </p>
+          </>}
         {isExpandedCard && (
           <div className='mt-10 flex gap-6 justify-center'>
             <Button
               label={
-                <p className='h-5 text-xl font-medium leading-5'>
-                  Again <span className='text-base font-normal'>&lt;1 min</span>
+                <p className='h-5 text-xl font-medium leading-5 flex gap-3 items-center'>
+                  Again<span className='text-base font-normal'>&lt;1 min</span>
                 </p>
               }
               variant='error'
@@ -159,8 +194,8 @@ export const Review = () => {
             />
             <Button
               label={
-                <p className='h-5 text-xl font-medium leading-5'>
-                  Hard <span className='text-base font-normal'>&lt;6 min</span>
+                <p className='h-5 text-xl font-medium leading-5 flex gap-3 items-center'>
+                  Hard<span className='text-base font-normal'>&lt;6 min</span>
                 </p>
               }
               variant='error-light'
@@ -168,8 +203,8 @@ export const Review = () => {
             />
             <Button
               label={
-                <p className='h-5 text-xl font-medium leading-5'>
-                  Good <span className='text-base font-normal'>&lt;10 min</span>
+                <p className='h-5 text-xl font-medium leading-5 flex gap-3 items-center'>
+                  Good<span className='text-base font-normal'>&lt;10 min</span>
                 </p>
               }
               variant='success-light'
@@ -177,8 +212,8 @@ export const Review = () => {
             />
             <Button
               label={
-                <p className='h-5 text-xl font-medium leading-5'>
-                  Easy <span className='text-base font-normal'>&lt;1 min</span>
+                <p className='h-5 text-xl font-medium leading-5 flex gap-3 items-center'>
+                  Easy<span className='text-base font-normal'>1 day</span>
                 </p>
               }
               variant='success'

@@ -6,10 +6,15 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  width: String
-}
+  width: String;
+};
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, width }) => {
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  width,
+}) => {
   return (
     <Transition.Root show={isOpen} as={React.Fragment}>
       <Dialog
@@ -38,16 +43,23 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, width }
             leaveFrom='opacity-100 scale-100'
             leaveTo='opacity-0 scale-95'
           >
-            <div className={`relative pt-[4.875rem] bg-white rounded-lg max-h-[51.25rem] h-auto`} style={{ width: `${width}` }}>
-              <div className='absolute right-6 top-6 cursor-pointer' onClick={onClose}>
+            <div
+              className={`relative pt-[4.875rem] bg-white rounded-lg max-h-[51.25rem] h-auto`}
+              style={{ width: `${width}` }}
+            >
+              <div
+                className='absolute right-6 top-6 cursor-pointer'
+                onClick={onClose}
+              >
                 <ModalCloseIcon />
               </div>
-              <div className='px-[4.5rem] pb-[4.875rem] max-h-[41.5rem] overflow-y-auto scrollbar-thin scrollbar-thumb-darkPrimary scrollbar-track-scrollbarBg scrollbar-thumb-rounded-lg scrollbar-track-rounded-lg'>{children}</div>
-
+              <div className='px-[3.5rem] pb-[5.3125rem] max-h-[41.5rem] overflow-y-auto scrollbar-thin scrollbar-thumb-darkPrimary scrollbar-track-scrollbarBg scrollbar-thumb-rounded-lg scrollbar-track-rounded-lg'>
+                {children}
+              </div>
             </div>
           </Transition.Child>
         </div>
       </Dialog>
     </Transition.Root>
   );
-}
+};

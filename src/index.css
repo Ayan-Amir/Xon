@@ -61,6 +61,10 @@ body {
   @apply text-darkPrimary text-sm text-center font-medium leading-[.875rem] md:leading-4 bg-errorButtonLight rounded-xl border border-errorButtonLight hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70 md:text-base shadow-[1px_4px_8px_0px_rgba(0,0,0,0.16)];
 }
 
+.error-outline {
+  @apply text-errorButton text-base text-center font-medium leading-4 bg-transparent border border-errorButton rounded-xl disabled:cursor-not-allowed disabled:bg-opacity-70;
+}
+
 .success {
   @apply text-darkPrimary text-sm text-center font-medium leading-[.875rem] md:leading-4 bg-successButton rounded-xl border border-successButton hover:cursor-pointer disabled:cursor-not-allowed disabled:bg-opacity-70 md:text-base shadow-[1px_4px_8px_0px_rgba(0,0,0,0.16)];
 }
@@ -87,7 +91,11 @@ body {
 
 /* Badge Variants */
 
-.badge {
+.badge-small {
+  @apply py-1 px-2 rounded-full border-none flex gap-0.5;
+}
+
+.badge-normal {
   @apply py-2 px-5 rounded-full border-none;
 }
 
@@ -97,6 +105,137 @@ body {
 
 .badge-green {
   @apply bg-badgeGreenBg text-badgeGreen;
+}
+.custom-scroll::-webkit-scrollbar {
+  width: 0.3125rem;
+  height: 100%;
+}
+
+/* Style the scroll track */
+.custom-scroll::-webkit-scrollbar-track {
+  background-color: #cecece; /* Background color of the track */
+  border-radius: 0.3125rem; /* Rounded corners for the track */
+}
+
+/* Style the scrollbar thumb (the draggable part) */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #202427; /* Color of the thumb */
+  border-radius: 0.1875rem; /* Rounded corners for the thumb */
+}
+
+/* Change the color of the thumb on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #cecece;
+}
+
+.w-inherit {
+  width: inherit;
+}
+
+.w-fill-available {
+  width: -webkit-fill-available;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 5px;
+  height: 100%;
+}
+
+/* Style the scroll track */
+.custom-scroll::-webkit-scrollbar-track {
+  background-color: #cecece; /* Background color of the track */
+  border-radius: 5px; /* Rounded corners for the track */
+}
+
+/* Style the scrollbar thumb (the draggable part) */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #202427; /* Color of the thumb */
+  border-radius: 3px; /* Rounded corners for the thumb */
+}
+
+/* Change the color of the thumb on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #cecece;
+}
+
+.w-inherit {
+  width: inherit;
+}
+
+.remove-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.stat:not(:first-child) {
+  padding-left: 1.5rem;
+}
+
+.stat:not(:last-child) {
+  padding-right: 1.5rem;
+  border-right: 1px solid #cccece;
+}
+
+@media screen and (min-width: 48rem) {
+  .stat:not(:first-child) {
+    padding-left: 2.25rem;
+  }
+  .stat:not(:last-child) {
+    padding-right: 2.25rem;
+  }
+}
+
+@media screen and (min-width: 64rem) {
+  .stat:not(:first-child) {
+    padding-left: 1.5rem;
+  }
+  .stat:not(:last-child) {
+    padding-right: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 90rem) {
+  .stat:not(:first-child) {
+    padding-left: 2.25rem;
+  }
+  .stat:not(:last-child) {
+    padding-right: 2.25rem;
+  }
+}
+
+.input::placeholder {
+  color: #ababab;
+}
+
+input[type='text']:focus {
+  /* border-color: blue; */
+  outline: none;
+}
+
+.hover-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 100%;
+}
+
+.hover-scroll:hover::-webkit-scrollbar {
+  width: 0.3125rem;
+}
+
+/* Style the scroll track */
+.hover-scroll::-webkit-scrollbar-track {
+  background-color: #cecece; /* Background color of the track */
+  border-radius: 5px; /* Rounded corners for the track */
+}
+
+/* Style the scrollbar thumb (the draggable part) */
+.hover-scroll::-webkit-scrollbar-thumb {
+  background-color: #202427; /* Color of the thumb */
+  border-radius: 3px; /* Rounded corners for the thumb */
+}
+
+/* Change the color of the thumb on hover */
+.hover-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #cecece;
 }
 
 /* Input Variants */
@@ -112,11 +251,155 @@ body {
 /* Avatar */
 
 .avatar {
-  @apply w-[6.25rem] h-[6.25rem] xl:w-[8.75rem] xl:h-[8.75rem];
+  @apply w-[6.25rem] h-[6.25rem] xl:w-[8.75rem] xl:h-[8.75rem] cursor-pointer;
 }
 
 /* Editor Background Color */
 
 .ProseMirror {
+  @apply !bg-transparent px-0;
+}
+
+/* Sortable tree CSS */
+
+.rst__virtualScrollOverride {
+  overflow: unset !important;
+}
+
+.rst__virtualScrollOverride * {
+  padding-bottom: 0 !important;
+}
+
+.rstcustom__rowWrapper {
+  @apply hover:bg-authBg hover:!opacity-100 rounded-lg hover:!cursor-pointer;
+}
+
+.rstcustom__node {
+  height: 2rem;
+}
+
+.rstcustom__row {
+  @apply !flex-1 !p-0;
+}
+
+.rstcustom__rowContents {
+  @apply !justify-start;
+}
+
+.rstcustom__rowLabel {
+  @apply !w-full !pr-0;
+}
+
+.rstcustom__collapseButton:focus::after,
+.rstcustom__expandButton:focus::after {
+  @apply !filter-none;
+}
+
+.rstcustom__expandButton {
+  margin-left: 10px;
+}
+
+.rstcustom__collapseButton,
+.rstcustom__expandButton {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.rst__placeholder {
+  opacity: 0;
+}
+
+.rstcustom__collapseButton::after,
+.rstcustom__expandButton::after {
+  content: url('./assets/expand-icon.svg') !important;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 2px;
+  transform-origin: 0 !important;
+  transform: none !important;
+  border: transparent !important;
+  border-left-width: 0 !important;
+  border-right-width: 0 !important;
+  border-top-color: transparent !important;
+}
+
+.rstcustom__expandButton::after {
+  transform: rotate(-90deg) !important;
+  top: 11px !important;
+  transform-origin: 0 !important;
+}
+
+.ProseMirror [contenteditable='false'] {
+  width: 220px !important;
   background-color: transparent !important;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.study-card-wrapper-front p * {
+  @apply !text-sm !font-bold;
+}
+
+.study-card-wrapper-back p {
+  @apply !text-xs;
+}
+
+.study-card-wrapper-front p {
+  @apply !hidden first:!block !h-6 !p-0 !font-gotham;
+}
+
+.study-card-wrapper-back p {
+  @apply !hidden first:!block !h-12 !p-0 !font-gotham;
+}
+
+.study-card-wrapper-front p {
+  @apply !max-h-6 !truncate;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 1 !important;
+}
+
+.study-card-wrapper-back p {
+  @apply !max-h-12 !text-ellipsis !leading-4 !overflow-hidden;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+}
+
+.custom-leaderboard-image:nth-child(2) li img {
+  @apply w-[4.5rem] h-[4.5rem];
+}
+@media screen and (min-width: 90rem) {
+  .custom-leaderboard-image:nth-child(2) li img {
+    @apply w-[90px] h-[5.625rem];
+  }
+}
+
+.saving-btn svg {
+  color: #3B71E7;
+}
+
+.review-flag-icon svg{
+  height: 100%;
+  width: 100%;
+}
+
+.activeLink {
+  background-color: #F3F4F8;
+  /* font-weight: 600; */
 }

@@ -13,9 +13,9 @@ export const ProgressBar = ({ progressbarDetail }: ProgressBarProps) => {
       <div className='w-full h-4 bg-reviewCardBg rounded-[3.75rem]'>
         <div style={{width: `${PROGRESS_BAR_WIDTH}%`}} className={`max-w-[57.25rem] h-full bg-darkPrimary rounded-[3.75rem]`}></div>
       </div>
-      <p className='text-2xl font-light leading-[1.375rem] text-black'>
+      {progressbarDetail?.data?.progress && <p className='text-2xl font-light leading-[1.375rem] text-black'>
       {progressbarDetail?.data?.progress}<span className='font-bold'>/{progressbarDetail?.data?.totalCards}</span>
-      </p>
+      </p>}
     </div>
   );
 };

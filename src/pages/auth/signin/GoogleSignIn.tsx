@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { usePostMutation } from '@/services/networkRequestService';
-import { Button } from '@/common/components/Button';
-import { ACCESS_TOKEN, PARTIAL_ACTIVE } from '@/utils/constant';
 import { apiEndPoint } from '@/services';
+import { ACCESS_TOKEN, PARTIAL_ACTIVE } from '@/utils/constant';
 import { setLocalStorageItem } from '@/utils';
 import { ROUTES } from '@/routes';
+import { Button } from '@/common/components/Button';
 import { GoogleIcon } from '@/assets/svgs';
 
 export const GoogleSignIn = () => {
@@ -24,30 +24,30 @@ export const GoogleSignIn = () => {
             setLocalStorageItem(ACCESS_TOKEN, data?.data?.accessToken);
             navigate(ROUTES.USER_TYPE);
         } else {
-            // TODO: Redirect to orignal dashboard
-            navigate(ROUTES.DASHBOARD);
+            setLocalStorageItem(ACCESS_TOKEN, data?.data?.accessToken);
+            navigate(ROUTES.HOME);
         }
-	};
-	
-	const googleSignInError = (error: object) => {
-		// TODO: show error in toast
-		console.log(error);
-	};
+    };
 
-	const getGoogleSignInPayload = () => {
-		const payload = {
-			accessToken: googleLoginResponse?.access_token,
-		}
-		return payload;
-	};
+    const googleSignInError = (error: object) => {
+        // TODO: show error in toast
+        console.log(error);
+    };
 
-	const { mutate: handleGoogleSignIn } = usePostMutation(
-		'google-sign-in',
-		apiEndPoint.GOOGLE_SIGN_IN,
-		getGoogleSignInPayload(),
-		googleSignInSuccess,
-		googleSignInError,
-	);
+    const getGoogleSignInPayload = () => {
+        const payload = {
+            accessToken: googleLoginResponse?.access_token,
+        }
+        return payload;
+    };
+
+    const { mutate: handleGoogleSignIn } = usePostMutation(
+        'google-sign-in',
+        apiEndPoint.GOOGLE_SIGN_IN,
+        getGoogleSignInPayload(),
+        googleSignInSuccess,
+        googleSignInError,
+    );
 
     useEffect(() => {
         googleLoginResponse && handleGoogleSignIn();
@@ -55,13 +55,13 @@ export const GoogleSignIn = () => {
 
     return (
         <Button
-            onClick={googleLogin} 
+            onClick={googleLogin}
             variant='tertiary'
             size='full'
             label='Sign in with Google'
             icon={<GoogleIcon />}
             iconType='lead'
             className='!py-4'
-        />                         
+        />
     );
 };

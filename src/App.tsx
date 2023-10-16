@@ -6,6 +6,8 @@ import packageJson from '../package.json';
 import { Routing } from '@/routes';
 import { useSetupAxios } from '@/services';
 import { ENVIRONMENT } from '@/utils/constant';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,7 @@ const App = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
+        <ToastContainer />
         <CacheBuster
           currentVersion={packageJson.version}
           isEnabled={isCacheBusterEnable}

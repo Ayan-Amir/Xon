@@ -1,2 +1,2 @@
-export { apiEndPoint } from './apiEndPoint';
-export { useSetupAxios } from './useSetupAxios';
+export { apiEndPoint } from '@/services/apiEndPoint';
+export { useSetupAxios } from '@/services/useSetupAxios';

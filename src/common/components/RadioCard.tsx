@@ -43,7 +43,11 @@ export function RadioCard({ selectedProfileType, setSelectedProfileType, profile
                 key={type?.id}
                 value={type}
                 className={({ checked }) =>
-                  `${checked ? 'bg-radioGroupBg !border-darkPrimary text-white' : 'bg-white'}
+                  `${
+                    checked
+                      ? 'bg-radioGroupBg !border-darkPrimary text-white'
+                      : 'bg-white'
+                  }
                     relative flex cursor-pointer rounded-lg px-[1.875rem] py-[2.125rem] border border-radioGroupBorder focus:outline-none`
                 }
               >

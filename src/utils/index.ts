@@ -1,4 +1,7 @@
-import { FIRST_PAGE, PAGE } from '@/utils/constant';
+import { AxiosResponse } from 'axios';
+import moment from 'moment';
+import { apiEndPoint } from '@/services';
+import { CARDS, DECK, FIRST_PAGE, FLAGGED, IMAGE, IS_FLAGGED, NavItem, PAGE, PARAGRAPH, SIDEBAR_UPPER_LINKS, SideBarCountProps, TODAY, TODAY_CARD } from '@/utils/constant';
 
 /**
  * Sets a value in the browser's local storage for a given key.
@@ -7,7 +10,7 @@ import { FIRST_PAGE, PAGE } from '@/utils/constant';
  * @param {T} value - The value to be stored.
  * @returns {void}
  */
-export const setLocalStorageItem = <T>(key: string, value: T): void => {
+export const setLocalStorageItem = (key: string, value: string): void => {
   localStorage.setItem(key, value);
 };
 
@@ -150,4 +153,131 @@ export const getUidFromUrl = (uidAtIndex: number) => {
   const UID = URL_PART[uidAtIndex];
 
   return UID;
+};
+
+export const doInfiniteScroll = (
+  event: React.UIEvent<HTMLDivElement>,
+  hasNextPage: boolean = false,
+  isRefetching: boolean = false,
+  fetchNextPage: () => void,
+) => {
+  const target = event.target as HTMLDivElement;
+  const { scrollHeight, scrollTop, clientHeight } = target;
+
+  if (
+    scrollHeight - scrollTop === clientHeight &&
+    hasNextPage &&
+    !isRefetching
+  ) {
+    fetchNextPage();
+  }
+};
+
+export const convertObjectToArray = (data: AxiosResponse | undefined) => {
+  return data ? Object.values(data).map((item) => item) : [];
+};
+
+export const convertDataIntoSidebarData = (data: AxiosResponse | undefined) => {
+  return data ? Object.values(data).map(value => {
+    // TODO: change hardcoded value with dynamic value
+    const transformedArray: any = {
+      id: value.id,
+      newCards: value?.newCards, 
+      reviewCards: value?.reviewCards,
+      title: value.name,
+      expanded: true,
+      children: [],
+    };
+
+    if (value.children) {
+      transformedArray.children = convertDataIntoSidebarData(value.children);
+    }
+
+    return transformedArray;
+  }) : [];
+};
+
+export const cardDueDate = (date: string) => {
+  const dueDate = moment(moment(date).format('YYYY-MM-DD'));
+  const todayDate = moment().format('YYYY-MM-DD');
+  const diffDays = dueDate.diff(todayDate, 'days');
+
+  if (diffDays === 0) {
+    return `1 day`;
+  } else if (diffDays > 0) {
+    return `${diffDays + 1} days`;
+  } else if (diffDays < 0) {
+    if (Math.abs(diffDays) === 1) {
+      return `${Math.abs(diffDays)} day ago`;
+    }
+    return `${Math.abs(diffDays)} days ago`;
+  }
+};
+
+export const capitalizeString = (string: string | undefined) => {
+  if (!!string) {
+    let lowerCaseString = string?.toLowerCase();
+    return lowerCaseString.charAt(0).toUpperCase() + lowerCaseString.slice(1);
+  }
+};
+
+export const getNextPage = (lastPage: AxiosResponse) => {
+  if (!!lastPage?.data?.next) {
+    const pageRegex = /page=([0-9]+)/;
+    const match = lastPage?.data?.next.match(pageRegex);
+    const pageNumber = match ? match[1] : FIRST_PAGE;
+    return pageNumber;
+  }
+};
+
+export const showNotionCard = (json) => {
+  if (JSON.parse(json)) {
+    let res = JSON.parse(json)?.find((block) => block.type !== IMAGE);
+    return res?.content[0]?.text;
+  }
+};
+
+export const gernalizeDeckName = (deckName: string, urlParam: string | undefined) =>
+  isNaN(urlParam) ? capitalizeString(urlParam) : deckName;
+
+export const getSideBarLabelAndCount = (sideBarUpperLinks: NavItem[], backendData: SideBarCountProps) => {
+
+  const updatedArray = sideBarUpperLinks.map(item => {
+    if (item.label === SIDEBAR_UPPER_LINKS.CARDS) {
+      return {
+        ...item,
+        totalCards: backendData?.data?.totalCards,
+      };
+    }
+    if (item.label === SIDEBAR_UPPER_LINKS.TODAY) {
+      return {
+        ...item,
+        totalCards: backendData?.data?.todayCards,
+      };
+    }
+    if (item.label === SIDEBAR_UPPER_LINKS.FLAGGED) {
+      return {
+        ...item,
+        totalCards: backendData?.data?.flaggedCards,
+      };
+    }
+    return item;
+  });
+
+  return updatedArray
+};
+
+export const updateReviewEndPoint = (param: string | undefined) => {
+  let reviewEndPoint = '';
+  if(param === FLAGGED) {
+    reviewEndPoint = `${apiEndPoint.REVIEW_DECK_CARD}?${IS_FLAGGED}=true`
+  } else  if(param === TODAY) {
+    reviewEndPoint = `${apiEndPoint.REVIEW_DECK_CARD}?${TODAY_CARD}=true`
+  } else  if(param === CARDS) {
+    reviewEndPoint = `${apiEndPoint.REVIEW_DECK_CARD}?${CARDS}=true`
+  } else {
+    reviewEndPoint = `${apiEndPoint.REVIEW_DECK_CARD}?${DECK}=${param}`
+  }
+
+  return reviewEndPoint;
 };

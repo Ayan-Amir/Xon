@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/common/components'
 import Congratulations from '@/assets/congrats.svg'
 
 export function ReviewCardCompleted() {
+  const navigate = useNavigate();
   return (
     <div className='flex flex-col items-center'>
       <div className='mt-10'>
@@ -16,7 +18,7 @@ export function ReviewCardCompleted() {
         expanded your knowledge in this field. Keep up the great work and
         continue to explore the wonders of science!
       </p>
-      <Button label='Continue' size='medium' className='!w-[26.5rem]' />
+      <Button label='Continue' size='medium' className='!w-[26.5rem]' onClick={() => navigate(-1)} />
     </div>
   )
 }

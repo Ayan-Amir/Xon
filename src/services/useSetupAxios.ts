@@ -20,8 +20,7 @@ export const useSetupAxios = () => {
     }
 
     if (config?.data instanceof FormData) {
-      const caseConvertedData = caseConverter.snakeKeys(config?.data, options);
-      config.data = caseConvertedData;
+      config.data;
     } else if (!!config.data) {
       const caseConvertedData = caseConverter.snakeKeys(config.data, {
         exclude: ['password1', 'password2', 'new_password1', 'new_password2'],

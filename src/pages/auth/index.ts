@@ -6,3 +6,4 @@ export { ResetPassword } from '@/pages/auth/resetPassword/ResetPassword';
 export { UserType } from '@/pages/auth/userType/UserType';
 export { DegreeSelect } from '@/pages/auth/degreeSelect/DegreeSelect';
 export { SuccessfulSignUp } from '@/pages/auth/successfulSignUp/SuccessfulSignUp';
+export { AccountVerified } from '@/pages/auth/accountVerified/AccountVerified';

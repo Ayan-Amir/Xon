@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/react';
 import App from '@/App.tsx';
 import '@/index.css';
 import 'react-loading-skeleton/dist/skeleton.css'
-import "@blocknote/core/style.css";
+import '@blocknote/core/style.css';
 
 if (import.meta.env.VITE_APP_SENTRY_DSN) {
   Sentry.init({
@@ -24,7 +24,8 @@ if (import.meta.env.VITE_APP_SENTRY_DSN) {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // TODO: will uncomment before deployment
+  // <React.StrictMode>
     <App />
-  </React.StrictMode>
+  // </React.StrictMode>
 );
