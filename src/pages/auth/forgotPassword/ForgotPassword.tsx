@@ -6,6 +6,8 @@ import { Button, Input } from '@/common/components';
 import { ROUTES } from '@/routes';
 import { apiEndPoint } from '@/services';
 import XonLogo from '@/assets/images/xon-logo.png';
+import { toast } from 'react-toastify';
+import { SUCCESSFUL_SEND_MESSAGE } from '@/utils/messages';
 
 export function ForgotPassword() {
   const navigate = useNavigate();
@@ -22,9 +24,7 @@ export function ForgotPassword() {
     onSubmit: () => handleForgotPassword(),
   });
 
-  const forgotPasswordSuccess = () => {
-    // TODO: show 'email successfully sent' toast here.
-  };
+  const forgotPasswordSuccess = () => toast.success(SUCCESSFUL_SEND_MESSAGE('Email'));
 
   const forgotPasswordError = (error: object) => {
     // TODO: show error in toast
